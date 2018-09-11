@@ -52,11 +52,11 @@ const tempPackageJSONPojo: PackageJSON = {
 
 (async () => {
   mkdirSync(copyDestinationPath);
-  await copy(depPath, join(rootPath, ...depArg.split('/'))).catch(Promise.resolve);
+  await copy(depPath, join(rootPath, ...depArg.split('/'))).catch(() => Promise.resolve());
   writeFileSync(packageJSONPath, JSON.stringify(tempPackageJSONPojo, null, 2));
   await exec(`cd ${rootPath} && yarn`);
   writeFileSync(packageJSONPath, JSON.stringify(packageJSONPojo, null, 2));
   await exec('git checkout yarn.lock -f');
-  await copy(copyDestinationPath, join(rootPath,'node_modules')).catch(Promise.resolve);
-  await rimraf(copyDestinationPath).catch(Promise.resolve);
+  await copy(copyDestinationPath, join(rootPath,'node_modules')).catch(() => Promise.resolve());
+  await rimraf(copyDestinationPath).catch(() => Promise.resolve());
 })();
