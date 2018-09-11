@@ -20,8 +20,9 @@ if (!depArg) {
   throw new Error('Please add a dependency');
 }
 
-const copyDestinationPath = join(rootPath, depArg.split('/')[0]);
-const depPath: string = join(rootPath, 'node_modules', ...depArg.split('/'));
+const primaryDepPath: string = depArg.split('/')[0];
+const copySourcePath: string = join(rootPath,'node_modules', primaryDepPath);
+const copyDestinationPath = join(rootPath, primaryDepPath);
 
 const packageJSONPojo: PackageJSON  = JSON.parse(readFileSync(packageJSONPath).toString('utf-8'));
 
@@ -52,11 +53,12 @@ const tempPackageJSONPojo: PackageJSON = {
 
 (async () => {
   mkdirSync(copyDestinationPath);
-  await copy(depPath, join(rootPath, ...depArg.split('/'))).catch(() => Promise.resolve());
+  await copy(copySourcePath, copyDestinationPath).catch(() => Promise.resolve());
   writeFileSync(packageJSONPath, JSON.stringify(tempPackageJSONPojo, null, 2));
   await exec(`cd ${rootPath} && yarn`);
   writeFileSync(packageJSONPath, JSON.stringify(packageJSONPojo, null, 2));
   await exec('git checkout yarn.lock -f');
-  await copy(copyDestinationPath, join(rootPath,'node_modules')).catch(() => Promise.resolve());
+  mkdirSync(copySourcePath);
+  await copy(copyDestinationPath, copySourcePath).catch(() => Promise.resolve());
   await rimraf(copyDestinationPath).catch(() => Promise.resolve());
 })();
