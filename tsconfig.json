@@ -5,7 +5,11 @@
     "sourceMap": true,
     "strictNullChecks": true,
     "noImplicitAny": true,
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "lib": [
+      "es2017"
+    ]
   },
   "exclude": [
     "node_modules"
