@@ -1,4 +1,4 @@
-#Script for NPM Projects to update and preserve a dependency with yarn
+# Script for NPM Projects to update and preserve a dependency with yarn
 
 Usage: 
 
